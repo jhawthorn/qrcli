@@ -1,6 +1,6 @@
 ## qrcli
 
-Generate QR codes on the command line using rqrcode
+Generate ANSI QR codes on the command line using rqrcode
 
 ```
 gem exec qrcli https://jhawthorn.com
