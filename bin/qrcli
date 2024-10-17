@@ -2,36 +2,6 @@
 
 require 'rqrcode'
 
-BLACK = "\e[40m"
-WHITE = "\e[107m"
-DEFAULT = "\e[0m"
-SPACER = "  "
-
 text = ARGV[0] || STDIN.read
-
-# make a qr code of the smallest possible size
-def minimal_qrcode text, opts={}
-  opts[:size] = 1
-  begin
-    return RQRCode::QRCode.new(text, opts)
-  rescue RQRCode::QRCodeRunTimeError => e
-    opts[:size] += 1
-    raise e if opts[:size] > 10
-    retry
-  end
-end
-
-def format_qrcode qr
-  width = qr.module_count
-  pad = WHITE + SPACER * (width + 2) + BLACK
-
-  lines = qr.to_s(:true => BLACK + SPACER, :false => WHITE + SPACER).split("\n")
-  lines.map! { |line| WHITE + SPACER + line + WHITE + SPACER + DEFAULT }
-
-  ([pad] + lines + [pad]).join("\n")
-end
-
-level = 'l'
-qr = minimal_qrcode text, :level => level
-puts format_qrcode(qr)
+puts RQRCode::QRCode.new(text).as_ansi
 
